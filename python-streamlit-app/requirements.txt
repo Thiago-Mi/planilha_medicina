@@ -2,5 +2,3 @@ streamlit
 pandas
 streamlit-aggrid
 tabela_interativa_nx3
-AgGrid
-GridOptionsBuilder
