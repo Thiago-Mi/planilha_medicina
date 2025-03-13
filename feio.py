@@ -1,8 +1,8 @@
 import streamlit as st
 import pandas as pd
-from st_aggrid import AgGrid, GridOptionsBuilder
-import streamlit as st
-import pandas as pd
+from st_aggrid import AgGrid
+from st_aggrid.grid_options_builder import GridOptionsBuilder
+
 
 
 def sum_weight(unit, limit, value, weight=1):
