@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
 from components.interactive_table import tabela_interativa_nx3
 from data.sample_data import *
 def main():

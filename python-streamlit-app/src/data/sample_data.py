@@ -74,5 +74,5 @@ dados_enare = [
     ("Participação em Congresso/Simpósio/Jornada (área profissional)", 0.1, 0.5),
     ("Representação estudantil em órgão colegiado - por ano", 1.0, 2),
     ("Participação em Ligas Acadêmicas - ≥ 12 meses", 0.5, 1),
-    ("Língua estrangeira: proficiência ou curso (≥ 3 anos)", 1.0, 1)
+    ("Língua estrangeira - proficiência ou curso (≥ 3 anos)", 1.0, 1)
 ]

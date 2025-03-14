@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-from st_aggrid import AgGrid, GridOptionsBuilder
 from components.operations import sum_weight
 
 def tabela_interativa_nx3(dados_tuplas):
@@ -32,39 +31,30 @@ def tabela_interativa_nx3(dados_tuplas):
             "Inteiro": integer
         })
     display_df = pd.DataFrame(display_data)
+
+    # Criar um formulário para conter o editor
+    edited_df = st.data_editor(
+            display_df,
+            column_config={
+                "String": st.column_config.TextColumn("String"),
+                "Float|Float": st.column_config.TextColumn("Float|Float", disabled=True),
+                "Inteiro": st.column_config.NumberColumn("Inteiro", min_value=0, max_value=100, step=1, format="%d")
+            },
+            hide_index=True,
+            use_container_width=True,
+            key="data_editor"
+        )
     
-    # Configuração das opções do grid
-    gb = GridOptionsBuilder.from_dataframe(display_df)
-    gb.configure_column('String', editable=False)
-    gb.configure_column('Inteiro',
-                       editable=True,
-                       type=["numericColumn", "numberColumnFilter"],
-                       valueFormatter="data.Inteiro.toFixed(0)")
-    gb.configure_grid_options(enableRangeSelection=True)
-    grid_options = gb.build()
-    
-    # Exibir o grid
-    grid_response = AgGrid(
-        display_df,
-        gridOptions=grid_options,
-        width='100%',
-        fit_columns_on_grid_load=True,
-        allow_unsafe_jscode=True,
-        update_mode="MODEL_CHANGED"
-    )
-    
-    # Obter o dataframe atualizado
-    result_df = grid_response['data']
-    
+ 
     # Calcular a soma usando a função sum_weight
     soma_inteiros = sum_weight(display_df["Point"].tolist(), 
                                display_df["Limit"].tolist(), 
-                               result_df["Inteiro"].tolist())
+                               edited_df["Inteiro"].tolist())
     
     st.write(f"Soma de todos os inteiros: {soma_inteiros}")
     
     # Atualizar o estado da sessão com os novos valores inteiros
-    st.session_state.integers = result_df["Inteiro"].tolist()
+    st.session_state.integers = edited_df["Inteiro"].tolist()
     
     # NOVO: Botão para download dos dados inteiros e da soma
     col1, col2 = st.columns(2)
@@ -72,8 +62,8 @@ def tabela_interativa_nx3(dados_tuplas):
     with col1:
         # Preparar o conteúdo do arquivo de texto para download
         txt_content = "Valores Inteiros:\n"
-        for idx, valor in enumerate(result_df["Inteiro"].tolist()):
-            string = result_df["String"].iloc[idx]
+        for idx, valor in enumerate(edited_df["Inteiro"].tolist()):
+            string = edited_df["String"].iloc[idx]
             txt_content += f"{string}: {valor}\n"
         txt_content += f"\nSoma total: {soma_inteiros}"
         
@@ -88,7 +78,7 @@ def tabela_interativa_nx3(dados_tuplas):
     with col2:
         # NOVO: Botão para importar dados inteiros
         uploaded_file = st.file_uploader("Importar dados inteiros", type=["txt"])
-        
+        print(uploaded_file)
         if uploaded_file is not None:
             # Ler o conteúdo do arquivo
             content = uploaded_file.getvalue().decode("utf-8")
@@ -101,10 +91,13 @@ def tabela_interativa_nx3(dados_tuplas):
                     try:
                         value = int(line.split(":")[1].strip())
                         imported_integers.append(value)
+                        print(line, value, line.split(":"))
                     except (ValueError, IndexError):
+                        print(ValueError, IndexError)
                         pass
-            
+
             # Atualizar os inteiros se a quantidade for compatível
+            print(imported_integers, st.session_state.integers)
             if len(imported_integers) == len(st.session_state.integers):
                 st.session_state.integers = imported_integers
                 st.success("Dados importados com sucesso!")
@@ -112,4 +105,4 @@ def tabela_interativa_nx3(dados_tuplas):
             else:
                 st.error(f"Número de valores incompatível. Esperado: {len(st.session_state.integers)}, Encontrado: {len(imported_integers)}")
     
-    return result_df, st.session_state.integers
+    return edited_df, st.session_state.integers

@@ -1,5 +1,2 @@
 streamlit
 pandas
-streamlit-aggrid
-tabela_interativa_nx3
-st_aggrid
