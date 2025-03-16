@@ -1,6 +1,10 @@
 import streamlit as st
 import pandas as pd
 from components.operations import sum_weight
+from components.operations import apply_exclusive_connections
+from data.sample_data import exclusive_groups
+
+
 
 def tabela_interativa_nx3(dados_tuplas):
     """
@@ -45,7 +49,7 @@ def tabela_interativa_nx3(dados_tuplas):
             key="data_editor"
         )
     
- 
+    display_df = apply_exclusive_connections(display_df, exclusive_groups)
     # Calcular a soma usando a função sum_weight
     soma_inteiros = sum_weight(display_df["Point"].tolist(), 
                                display_df["Limit"].tolist(), 
@@ -61,7 +65,7 @@ def tabela_interativa_nx3(dados_tuplas):
     
     with col1:
         # Preparar o conteúdo do arquivo de texto para download
-        txt_content = "Valores Inteiros:\n"
+        txt_content = "Valores Inteiros\n"
         for idx, valor in enumerate(edited_df["Inteiro"].tolist()):
             string = edited_df["String"].iloc[idx]
             txt_content += f"{string}: {valor}\n"

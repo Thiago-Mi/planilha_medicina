@@ -23,8 +23,8 @@ dados_aremg = [
     ("Título avançado em inglês (Titulação Internacional)", 1.0, 1.0),
     ("Título intermediário em inglês (Titulação Internacional)", 0.5, 1.0),
     ("Título avançado em outra língua (Titulação Internacional)", 0.5, 1.0),
-    ("Ter cursado 4 semestres de outra língua (Faculdade de Letras)", 0.3, 1.0),
-    ("Ter cursado 4 semestres de outra língua (Histórico Escolar Medicina)", 0.3, 1.0),
+    # Atualização: única entrada para os 4 semestres completos de língua estrangeira, conforme edital
+    ("Ter cursado 4 semestres completos de outra língua (Titulação Internacional)", 0.5, 1.0),
     ("Estágio Extracurricular - 6 meses (mín. 180 horas)", 0.7, 2.0),
     ("Estágio Extracurricular - 2 estágios de 3 meses cada (mín. 90 horas cada)", 0.7, 2.0),
     ("Projeto ou Programa de Extensão na área médica (01 projeto)", 0.5, 0.5),
@@ -56,6 +56,7 @@ dados_aremg = [
 ]
 
 
+
 dados_enare = [
     ("Histórico Escolar - ≥ 50% menção A ou nota 7-10/70-100", 40, 40),
     ("Histórico Escolar - ≥ 50% menção A e B ou SS e MS ou nota 7-10/70-100", 30, 40),
@@ -75,4 +76,15 @@ dados_enare = [
     ("Representação estudantil em órgão colegiado - por ano", 1.0, 2),
     ("Participação em Ligas Acadêmicas - ≥ 12 meses", 0.5, 1),
     ("Língua estrangeira - proficiência ou curso (≥ 3 anos)", 1.0, 1)
+]
+
+exclusive_groups = [
+    [
+        "Aproveitamento Curricular - ≥ 50% notas ≥ 85 (4 primeiros anos)",
+        "Aproveitamento Curricular - ≥ 50% notas ≥ 80 (4 primeiros anos)",
+        "Aproveitamento Curricular - ≥ 50% notas ≥ 75 (4 primeiros anos)",
+        "Aproveitamento Curricular - Notas dos 4 primeiros anos não atingem valores acima",
+        "Aproveitamento Curricular - Notas dos 4 primeiros anos apenas suficientes"
+    ],
+    # Outras conexões podem ser adicionadas aqui...
 ]
