@@ -28,3 +28,42 @@ def sum_weight(unit, limit, value, weight=1):
     
     # Multiplica a soma pelo peso
     return total * weight
+
+def apply_exclusive_connections(df, exclusive_groups, value_col="Inteiro", max_col="Limit"):
+    """
+    Recebe um DataFrame e uma lista de grupos de strings mutuamente exclusivos.
+    Para cada grupo, se um dos itens tiver o valor preenchido (maior que zero) na coluna value_col,
+    os demais itens do grupo terão seu valor (value_col) zerado e o valor máximo (max_col) ajustado para zero, 
+    para que não possam ser alterados.
+    
+    Parâmetros:
+      df (pd.DataFrame): DataFrame que contém, entre outras, as colunas 'String', value_col e max_col.
+      exclusive_groups (list of list): Lista de grupos; cada grupo é uma lista de termos (strings) que se 
+                                       excluem mutuamente.
+      value_col (str): Coluna que representa o valor atual (padrão "Inteiro")
+      max_col (str): Coluna que representa o valor máximo permitido (padrão "Limit")
+      
+    Retorna:
+      pd.DataFrame: DataFrame modificado.
+    """
+    # Para cada grupo de exclusão
+    for group in exclusive_groups:
+        # Seleciona as linhas que possuem a string em um dos termos do grupo
+        group_mask = df["String"].isin(group)
+        
+        # Se não há itens suficientes, pula o grupo
+        if group_mask.sum() < 2:
+            continue
+        
+        # Verifica se algum item já foi preenchido (valor > 0)
+        selected_indices = df[group_mask & (df[value_col] > 0)].index.tolist()
+        if selected_indices:
+            # Mantém apenas o primeiro selecionado e zera os demais
+            chosen = selected_indices[0]
+            for idx in df[group_mask].index:
+                if idx != chosen:
+                    df.at[idx, value_col] = 0
+                    df.at[idx, max_col] = 0
+                    # Se preferir remover o item para evitar confusão no formulário, pode descomentar a linha a seguir:
+                    # df.drop(idx, inplace=True)
+    return df
